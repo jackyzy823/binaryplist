@@ -4,6 +4,7 @@
 
 from struct import unpack
 from datetime import datetime, tzinfo, timedelta
+from plistlib import Data
 
 # HEADER
 #         magic number ("bplist")
@@ -188,7 +189,7 @@ class BinaryPListReader(object):
         elif nb1 == MARKER_DATA:
             # Binary data
             count = self._read_count(nb2)
-            obj = self._fd.read(count)
+            obj = Data(self._fd.read(count))
         elif nb1 == MARKER_ASCIISTRING:
             # ASCII string
             count = self._read_count(nb2)
