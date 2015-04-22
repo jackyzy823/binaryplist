@@ -13,7 +13,13 @@ def dump(obj, format):
         writePlist(obj, sys.stdout)
     elif 'json' == format:
         import json
-        s = json.dumps(obj, indent=2)
+        from plistlib import Data
+        class DataEncoder(json.JSONEncoder):
+            def default(self,obj):
+                if isinstance(obj,Data):
+                    return obj.asBase64()
+                return json.JSONEncoder.default(self,obj)
+        s = json.dumps(obj, indent=2, cls=DataEncoder)
         print(s)
 
 
